@@ -26,6 +26,7 @@ int main( int argc, char** argv )
     imshow( "Display window", image );                   // Show our image inside it.
 
     cout << "Affichage de : " << argv[1] << endl;
+    cout << "Ceci est une modif faite sur la branche newbranch" << endl;
     waitKey(0);                                          // Wait for a keystroke in the window
     return 0;
 }
