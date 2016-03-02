@@ -13,7 +13,7 @@ def draw_contours(img, img_thresh, contours_colors):
 
 # Test
 if __name__ == "__main__":
-	img = cv2.imread("Fruits.jpg")
+	img = cv2.imread("../img/Fruits.jpg")
 	img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 	_, img_thresh = cv2.threshold(img_gray, MAX_PIXEL_VAL/2, MAX_PIXEL_VAL, cv2.THRESH_BINARY)
 	img = draw_contours(img, img_thresh, CONTOURS_COLOR)
