@@ -1,5 +1,6 @@
 import cv2
-from Constances import *
+
+from src.old.Constances import *
 
 # Recommended value by doc
 K_SIZE = (13, 13)

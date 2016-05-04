@@ -1,5 +1,6 @@
 import cv2
-from Constances import *
+
+from src.old.Constances import *
 
 
 def draw_contours(img, img_thresh, contours_colors, contours_thickness):
