@@ -34,7 +34,7 @@ class AppleDetect:
                     found = False
             if found:
                 self.nb_apples_fit += 1
-                self.info_apples_fit.append([(x + (w / 2), y + (h / 2)), (w + h) / 5])
+                self.info_apples_fit.append([(x+(w/2), y+(h/2)), (w+h)/5, color])
             found = False
             cv2.circle(mask, center=(x+(w/2), y+(h/2)), radius=(w+h)/5, color=BLACK, thickness=-1)
 
@@ -57,7 +57,7 @@ if __name__ == '__main__':
     apple_detector.detect_and_filter(img)
 
     for i in iter(apple_detector.info_apples_fit):
-        cv2.circle(img, i[0], i[1], BLUE, thickness=5)
+        cv2.circle(img, i[0], i[1], i[2], thickness=-1)
 
     cv2.imshow('img', img)
     cv2.waitKey(0)
