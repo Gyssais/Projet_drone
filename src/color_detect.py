@@ -8,6 +8,9 @@ K_SIZE = (5, 5)
 
 
 class ColorDetect:
+
+    HSV, RGB, HLS, LUV, LAB, No_filter = range(6)
+
     def __init__(self):
         self._click_position = (0, 0)
         self._upper_color = np.array([0, 0, 0])
@@ -50,10 +53,23 @@ class ColorDetect:
     # ------------ PUBLIC METHODS ----------- #
     # --------------------------------------- #
 
-    def run(self, img):
+    def run(self, img, filter_mode=HSV):
         self._img = img
         blurred_img = cv2.GaussianBlur(self._img, (11, 11), 5)
-        self._filtered_img = cv2.cvtColor(blurred_img, cv2.COLOR_BGR2HSV)
+
+        if filter_mode == ColorDetect.HSV:
+            self._filtered_img = cv2.cvtColor(blurred_img, cv2.COLOR_BGR2HSV)
+        elif filter_mode == ColorDetect.HLS:
+            self._filtered_img = cv2.cvtColor(blurred_img, cv2.COLOR_BGR2HLS)
+        elif filter_mode == ColorDetect.RGB:
+            self._filtered_img = cv2.cvtColor(blurred_img, cv2.COLOR_BGR2RGB)
+        elif filter_mode == ColorDetect.LUV:
+            self._filtered_img = cv2.cvtColor(blurred_img, cv2.COLOR_BGR2LUV)
+        elif filter_mode == ColorDetect.LAB:
+            self._filtered_img = cv2.cvtColor(blurred_img, cv2.COLOR_BGR2LAB)
+        else:
+            self._filtered_img = blurred_img
+
         self._set_pixel_color_thresh(self._filtered_img[self._click_position])
         self._masked_img = cv2.inRange(self._filtered_img, self._lower_color, self._upper_color)
         self._masked_img = self._opening_op(K_SIZE)
@@ -82,7 +98,7 @@ class ColorDetect:
                         cv2.drawContours(self._img, self._contours, i, color, thickness=thickness)
         else:
             cv2.drawContours(self._img, self._contours, ALL_CONTOURS, color, thickness=thickness)
-            print len(self._contours)
+            # print 'Number of contours = ', len(self._contours)
 
 
 if __name__ == '__main__':
