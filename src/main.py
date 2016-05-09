@@ -6,7 +6,7 @@ if __name__ == '__main__':
     color_detect = ColorDetect()
     color_detect.initialize()
 
-    track_bar = ColorCalib()
+    track_bar = HSVToleranceCalib()
     track_bar.create()
 
     cam = cv2.VideoCapture(0)
