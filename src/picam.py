@@ -1,6 +1,7 @@
 import time
 from color_detect import *
 from color_calib import *
+from apple_detect import *
 from picamera.array import PiRGBArray
 from picamera import PiCamera
 
@@ -12,10 +13,12 @@ class PiCam:
     def __init__(self):
         self._cam = PiCamera()
         self._raw_capt = None
+        self.apple_detector = AppleDetect()
 
     def initialize(self, resolution=(640, 480), fps=32):
         self._cam.resolution = resolution
         self._cam.framerate = fps
+        self._cam.awb_mode = 'tungsten'
         self._raw_capt = PiRGBArray(cam, size=resolution)
         time.sleep(1)
 
@@ -27,7 +30,10 @@ class PiCam:
             if func:
                 func(img)
             # clear previous stream
-
+            self.apple_detector.set_all_color()
+            self.apple_detector.detect_and_filter(img)
+            for i in iter(self.apple_detector.info_apples_fit):
+                cv2.circle(img, i[0], i[1], i[2], thickness=-1)
             cv2.imshow('cam', img)
             self._raw_capt.truncate(0)
 
@@ -40,19 +46,4 @@ class PiCam:
 if __name__ == '__main__':
     cam = PiCam()
     cam.initialize()
-
-    color_detect = ColorDetect()
-    color_detect.initialize()
-
-    track_bar = HSVToleranceCalib()
-    track_bar.create()
-
-
-    def img_proc(img):
-        color_detect.set_tolerance(track_bar.get_tolerance())
-        color_detect.run(frame)
-        color_detect.draw_contours()
-        color_detect.display()
-
-
-    cam.run(img_proc)
+    cam.run()
