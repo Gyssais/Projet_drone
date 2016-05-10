@@ -63,9 +63,6 @@ class ColorPickerBGR:
 
 if __name__ == '__main__':
 
-    track_bar = HSVToleranceCalib()
-    track_bar.create()
-
     color_picker = ColorPickerBGR()
     color_picker.create()
 
@@ -74,5 +71,3 @@ if __name__ == '__main__':
 
     cv2.destroyAllWindows()
 
-    my_file = 'image' + str(1) + '.jpg'
-    print my_file

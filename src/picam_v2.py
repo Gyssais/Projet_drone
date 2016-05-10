@@ -1,7 +1,6 @@
 from picamera.array import PiRGBArray
 from picamera import PiCamera
-from threading import Thread
-import cv2
+from constance import *
 
 
 class PiVideoStream:
@@ -51,10 +50,13 @@ class PiVideoStream:
 if __name__ == '__main__':
 
     picam = PiVideoStream()
-    picam.start()
+    Thread(target=picam.run()).start()
 
     while cv2.waitKey(1) != ord('q'):
-        cv2.imshow('img', picam.read())
+        try:
+            cv2.imshow('img', picam.read())
+        except cv2.error:
+            print 'No frame yet'
 
     cv2.destroyAllWindows()
     picam.stop()
