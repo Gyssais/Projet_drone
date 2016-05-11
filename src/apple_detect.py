@@ -47,6 +47,9 @@ class AppleDetect:
         self._upper_color = WHITE
         self._lower_color = BLACK
 
+    def reset_info(self):
+        self.info_apples_fit = []
+
 
 if __name__ == '__main__':
 

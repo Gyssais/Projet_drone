@@ -9,6 +9,7 @@ STREAM_FORMAT = 'bgr'
 
 
 class PiCam:
+
     def __init__(self):
         self._cam = PiCamera()
         self._raw_capt = None

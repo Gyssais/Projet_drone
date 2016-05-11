@@ -1,22 +1,14 @@
-from color_calib import *
-from color_detect import *
+from picam_v2 import *
+from apple_detect import *
+from color_calib import ColorPickerBGR
 
 if __name__ == '__main__':
 
-    color_detect = ColorDetect()
-    color_detect.initialize()
+    video_stream = PiVideoStream()
+    apple_detector = AppleDetect()
+    color_picker = ColorPickerBGR()
 
-    track_bar = HSVToleranceCalib()
-    track_bar.create()
+    color_picker.create()
 
-    cam = cv2.VideoCapture(0)
-
-    while cv2.waitKey(1) != ord('q'):
-        _, frame = cam.read()
-        color_detect.set_tolerance(track_bar.get_tolerance())
-        color_detect.run(frame)
-        color_detect.draw_contours()
-        color_detect.display()
-
-    cam.release()
-    cv2.destroyAllWindows()
+    Thread(target=video_stream.run, name='pi_camera').start()
+    Thread(target=color_picker.set_color, name='color_picker').start()
