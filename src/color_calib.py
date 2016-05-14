@@ -69,5 +69,4 @@ if __name__ == '__main__':
     while cv2.waitKey(1) != ord('q'):
         color_picker.set_color()
 
-    cv2.destroyAllWindows()
 
