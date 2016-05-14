@@ -27,6 +27,7 @@ class AppleDetect:
         for (x, y, w, h) in self._apples:
             cv2.circle(mask, center=(x+(w/2), y+(h/2)), radius=(w+h)/5, color=WHITE, thickness=-1)
             color = cv2.mean(img, mask)
+            self.info_apples_fit.append([(x+(w/2), y+(h/2)), (w+h)/5, color])
             for i in range(3):
                 if self._upper_color[i] > color[i] > self._lower_color[i]:
                     found = True
@@ -34,14 +35,14 @@ class AppleDetect:
                     found = False
             if found:
                 self.nb_apples_fit += 1
-                self.info_apples_fit.append([(x+(w/2), y+(h/2)), (w+h)/5, color])
             found = False
             cv2.circle(mask, center=(x+(w/2), y+(h/2)), radius=(w+h)/5, color=BLACK, thickness=-1)
 
-    def set_color_thresh(self, color, tolerance):
-        for i in range(3):
-            self._upper_color[i] = color[i]*(1+tolerance)
-            self._lower_color[i] = color[i]*(1-tolerance)
+    def set_upper_color(self, val):
+        self._upper_color = val
+
+    def set_lower_color(self, val):
+        self._lower_color = val
 
     def set_all_color(self):
         self._upper_color = WHITE
@@ -49,18 +50,22 @@ class AppleDetect:
 
     def reset_info(self):
         self.info_apples_fit = []
+        self.nb_apples_found = 0
+        self.nb_apples_fit = 0
 
 
 if __name__ == '__main__':
 
-    img = cv2.imread('../img/many_apples.jpg')
+    img = cv2.imread('../img/1 apple.jpg')
+    test = np.zeros(img.shape, np.uint8)
 
     apple_detector = AppleDetect()
     apple_detector.set_all_color()
     apple_detector.detect_and_filter(img)
 
     for i in iter(apple_detector.info_apples_fit):
-        cv2.circle(img, i[0], i[1], i[2], thickness=-1)
-
+        cv2.circle(test, i[0], i[1], i[2], thickness=-1)
+    
     cv2.imshow('img', img)
+    cv2.imshow('test', test)
     cv2.waitKey(0)
