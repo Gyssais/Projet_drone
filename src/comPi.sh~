@@ -1,0 +1,6 @@
+while 1
+do
+    scp pi@192.168.43.94:~/test.txt ./
+    cat test.txt
+    sleep 1
+done
