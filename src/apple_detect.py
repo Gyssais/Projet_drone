@@ -65,7 +65,7 @@ if __name__ == '__main__':
 
     for i in iter(apple_detector.info_apples_fit):
         cv2.circle(test, i[0], i[1], i[2], thickness=-1)
-
+    
     cv2.imshow('img', img)
     cv2.imshow('test', test)
     cv2.waitKey(0)
