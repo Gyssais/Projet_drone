@@ -13,7 +13,7 @@ apple_cascade = cv2.CascadeClassifier('cascade_pomme3.xml')
 
 
 # Ouverture de l'image a traiter(capture et detecter a partir d'une image donnée)
-img = cv2.imread('img_test/pommier8.jpg')
+img = cv2.imread('img_test/pommetest2.jpg')
 # Affichage de l'image avant traitement
 cv2.imshow('img', img)
 ########
@@ -28,8 +28,8 @@ apples = apple_cascade.detectMultiScale(gray, 1.3, 5)
 for (x,y,w,h) in apples:
 
 	img = cv2.rectangle(img,(x,y),(x+w,y+h),(255,0,0),2)
-       	font = cv2.FONT_HERSHEY_SIMPLEX
-       	cv2.putText(img,'Pomme',(x,y), font, 1,(255,0,0),2,cv2.LINE_AA)
+       	#font = cv2.FONT_HERSHEY_SIMPLEX
+       	#cv2.putText(img,'Pomme',(x,y), font, 1,(255,0,0),2,cv2.LINE_AA)
 
 
         #roi_gray = gray[y:y+h, x:x+w]
@@ -37,7 +37,9 @@ for (x,y,w,h) in apples:
         #eyes = eye_cascade.detectMultiScale(roi_gray)
         #for (ex,ey,ew,eh) in eyes:
         #    cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)
-	cv2.imshow('img',img)
-	cv2.waitforkey(1)
+cv2.imshow('img',img)
+cv2.waitKey(0)
+
+cv2.imwrite('detection_1.jpg', img)
 
 cv2.destroyAllWindows()
