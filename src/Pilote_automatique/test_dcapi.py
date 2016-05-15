@@ -1,5 +1,6 @@
-import dcapi
 import time
+
+import dcapi
 
 data_test = [120,120,120,120, 120,120,120,120,0,0,131,260]
 

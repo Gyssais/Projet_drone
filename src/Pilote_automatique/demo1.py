@@ -1,5 +1,6 @@
-import dcapi
 import time
+
+import dcapi
 
 dcapi.init()
 button = 0

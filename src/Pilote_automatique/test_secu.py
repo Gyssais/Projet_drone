@@ -1,5 +1,6 @@
-import dcapi
 import time
+
+import dcapi
 
 dcapi.init()
 
@@ -17,7 +18,7 @@ try:
     
     while dcapi.read_button() == 0:
         time.sleep(1)
-        print str(dcapi.write_channel(11,200,1))
+        print str(dcapi.write_channel(11, 200, 1))
 
 
 finally:                      # quand on quitte, normalement ou pas
