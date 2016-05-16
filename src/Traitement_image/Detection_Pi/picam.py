@@ -11,10 +11,11 @@ STREAM_FORMAT = 'bgr'
 
 class PiCam:
 
-    def __init__(self):
+    def __init__(self, disp=None):
         self._cam = PiCamera()
         self._raw_capt = None
         self._img = None
+        self._disp = disp
         self.apple_detector = AppleDetect()
 
     def initialize(self, resolution=(320, 240)):
@@ -42,7 +43,7 @@ class PiCam:
                     repr(self.apple_detector.nb_apples_fit)+'\n')
         cv2.imwrite('img.jpeg', img) 
         self.apple_detector.reset_info()
-        cv2.imshow('cam', img)
+        cv2.imshow('cam', img) if self._disp else None
         f.close()
         print 'nb de pommes detectees: ', self.apple_detector.nb_apples_found
         print 'nb de pommes mures: ', self.apple_detector.nb_apples_fit
@@ -73,7 +74,7 @@ class PiCam:
                             repr(self.apple_detector.nb_apples_found)+','+
                             repr(self.apple_detector.nb_apples_fit)+'\n')   
                 cv2.imwrite('img.jpeg', img) 
-                cv2.imshow('cam', img)
+                cv2.imshow('cam', img) if self._disp else None
                 f.close()
             finally:
                 # clear previous stream

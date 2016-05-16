@@ -9,7 +9,7 @@ if __name__ == '__main__':
     dcapi.init()
     
     Thread(target=cam.run).start()
-    Thread(target=test_ch, name='autopilot').start()
+    #Thread(target=test_ch, name='autopilot').start()
 
 
 
