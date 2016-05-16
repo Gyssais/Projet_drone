@@ -202,8 +202,8 @@ def enable_control(mode):
     ENABLE_STATE = mode
 
 
-    #calibre l'accelerometre du drone
-def calibration_acc():
+    #calibration du gyroscope du drone
+def calibration_gyro():
 
     global FLAG
     if check_control() == 0:
