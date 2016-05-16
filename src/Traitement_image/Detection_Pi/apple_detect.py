@@ -56,7 +56,7 @@ class AppleDetect:
 
 if __name__ == '__main__':
 
-    img = cv2.imread('../img/1 apple.jpg')
+    img = cv2.imread('../../img/many_apples.jpg')
     test = np.zeros(img.shape, np.uint8)
 
     apple_detector = AppleDetect()
