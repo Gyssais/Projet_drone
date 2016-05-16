@@ -1,6 +1,6 @@
+# import src.Pilote_automatique.dcapi
+from src.Pilote_automatique.autopilot import *
 from src.Traitement_image.Detection_Pi.picam import *
-import dcapi
-import autopilot
 
 if __name__ == '__main__':
 
@@ -8,8 +8,8 @@ if __name__ == '__main__':
     cam.initialize()
     dcapi.init()
     
-    Thread(target=cam.run, name='detector').start()
-    Thread(target=autopilot.test_ch, name='autopilot').start()
+    Thread(target=cam.run).start()
+    Thread(target=test_ch, name='autopilot').start()
 
 
 
