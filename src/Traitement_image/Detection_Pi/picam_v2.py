@@ -2,6 +2,7 @@ from picamera.array import PiRGBArray
 from picamera import PiCamera
 from constance import *
 
+print 'fin importation'
 
 class PiVideoStream:
 
@@ -49,12 +50,16 @@ class PiVideoStream:
 
 
 if __name__ == '__main__':
-
+    
+    print 'main'
     picam = PiVideoStream()
+    print 'init camera'
     Thread(target=picam.run()).start()
+    print 'thread demarrer'
 
     while cv2.waitKey(1) != ord('q'):
         try:
+            print 'show img'
             cv2.imshow('img', picam.read())
         except cv2.error:
             print 'No frame yet'
