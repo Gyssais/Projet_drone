@@ -9,6 +9,6 @@ if __name__ == '__main__':
     Thread(target=cam.run, name='detector').start()
     Thread(target=gpio.run, name='gpio').start()
 
-    
+
 
 
