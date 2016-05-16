@@ -15,7 +15,7 @@ def demo_start_stop():
             time.sleep(0.1)
             
         dcapi.led_blink()
-        print str(dcapi.calibration_acc())
+        print str(dcapi.calibration_gyro())
         dcapi.led_on()
 
         while button == 0:
