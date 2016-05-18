@@ -7,8 +7,8 @@ P1 = 17 # ppm signal low polarity, i.e idle level is high
 P2 = 22 # ppm signal high polarity, i.e idle level is low
 ENABLE_PIN = 9 # permet d'accepter ou de rendre le controle par le Raspberry
 BUTTON_PIN = 23 # boutton poussoir de la carte, idle low
-RADIO_1 = 5 # signal logique, commande le mux ** bug
-RADIO_2 = 6 # signal logique  ** bug
+RADIO_1 = 5 # signal logique, commande le mux 
+RADIO_2 = 6 # signal logique  
 LED_PIN = 4 # led user de la carte  
 
 
@@ -77,7 +77,7 @@ def init():
     pi.set_mode(ENABLE_PIN, pigpio.OUTPUT)
     pi.set_mode(LED_PIN, pigpio.OUTPUT)
     #pi.set_mode(RADIO_1, pigpio.INPUT)  plante sur nos rasp. Mais utilisable car mode par défaut = input
-    #pi.set_mode(RADIO_2, pigpio.INPUT)
+    #pi.set_mode(RADIO_2, pigpio.INPUT)  pareil
     pi.set_mode(BUTTON_PIN, pigpio.INPUT)
 
     pi.set_PWM_frequency(LED_PIN, 1)
