@@ -31,10 +31,10 @@ MIN_LENGHT = 500
 TOTAL_LENGHT = 30000
 
     #Valeur max et min
-MAX_IN = 260
+MAX_IN = 255
 MIN_IN = 0
-AVR_IN = 131
-OFFSET = 39
+AVR_IN = 127
+
 
 
     #Channel assignment
@@ -56,10 +56,8 @@ ALTI_HOLD = MAX_IN
 
 NBR_CHANNEL = 12
 
-
-
-A = (MAX_LENGHT-MIN_LENGHT)/MAX_IN
-B = MIN_LENGHT
+A = 2.86
+B = 480
 
 DEFAULT_DATA = [AVR_IN, AVR_IN, AVR_IN, AVR_IN, ALTI_HOLD, GPS_HOLD, AVR_IN, AVR_IN, AVR_IN, AVR_IN, AVR_IN, AVR_IN]
 CURRENT_DATA = DEFAULT_DATA
@@ -78,7 +76,7 @@ def init():
     pi.set_mode(P2, pigpio.OUTPUT)
     pi.set_mode(ENABLE_PIN, pigpio.OUTPUT)
     pi.set_mode(LED_PIN, pigpio.OUTPUT)
-    #pi.set_mode(RADIO_1, pigpio.INPUT)
+    #pi.set_mode(RADIO_1, pigpio.INPUT)  plante sur nos rasp. Mais utilisable car mode par défaut = input
     #pi.set_mode(RADIO_2, pigpio.INPUT)
     pi.set_mode(BUTTON_PIN, pigpio.INPUT)
 
@@ -108,11 +106,11 @@ def ppm_update(data):
     
     for i in range(NBR_CHANNEL):
         if data[i] <= MAX_IN and data[i] >= MIN_IN:
-            transit=(A*(data[i]+OFFSET)+B)
+            transit=int(round((A*(data[i])+B)))
             trame.append(pigpio.pulse(1<<P1,1<<P2,transit))
             current_lenght+=transit
         else:
-            transit=(A*(DEFAULT_DATA[i]+OFFSET)+B)
+            transit=int(round((A*(DEFAULT_DATA[i])+B)))
             trame.append(pigpio.pulse(1<<P1,1<<P2,transit))
             current_lenght+=transit
             result = i # memorise quelle channel a leve l'erreur 
@@ -137,12 +135,12 @@ def ppm_update(data):
     return result
 
 
-def stop_ppm():
+def ppm_stop():
     pi.wave_tx_stop()
     pi.set_PWM_dutycycle(LED_PIN, 128)
 
 def free_pi():
-    stop_ppm()
+    ppm_stop()
     pi.set_PWM_dutycycle(LED_PIN, 0)
     pi.stop()
 
@@ -160,23 +158,23 @@ def write_channel(ch, value, update=0):
 
     # value = 0 - 255
 def yaw(value):
-    return write_channel(YAW, value)
+    return write_channel(YAW-1, value)
 
 def throttle(value):
-    return write_channel(THROTTLE, value)
+    return write_channel(THROTTLE-1, value)
     
 def nick(value):
-    return write_channel(NICK, value)
+    return write_channel(NICK-1, value)
 
 def roll(value):
-    return write_channel(ROLL, value)
+    return write_channel(ROLL-1, value)
 
     # mode: voir variable plus haut
 def gps(mode):
-    return write_channel(GPS, mode)
+    return write_channel(GPS-1, mode)
 
 def alti(mode):
-    return write_channel(ALTI, mode)
+    return write_channel(ALTI-1, mode)
 
 def read_ch1():
     return pi.read(RADIO_1)
@@ -202,7 +200,7 @@ def enable_control(mode):
     ENABLE_STATE = mode
 
 
-    #calibration du gyroscope du drone
+    #calibre lu gyroscope du drone
 def calibration_gyro():
 
     global FLAG
@@ -219,7 +217,7 @@ def calibration_gyro():
         print 'Calibration avorted. error code:'+str(err)
         return err
     
-    time.sleep(2)
+    time.sleep(3)
     
     err = throttle(AVR_IN)
     err = yaw(AVR_IN)
@@ -262,7 +260,8 @@ def arm():
         print 'arming avorted. error code:'+str(err)
         return err
 
-    time.sleep(3)
+    time.sleep(4)
+    
     err = ppm_update(DEFAULT_DATA)
 
     if FLAG == OK:
@@ -294,7 +293,7 @@ def disarm():
         print 'disarming avorted. error code:'+str(err)
         return err
 
-    time.sleep(3)
+    time.sleep(4)
     err = ppm_update(DEFAULT_DATA)
 
     if FLAG == OK:
@@ -315,3 +314,4 @@ def check_control():
         return 1
     else:
         return 0
+    
