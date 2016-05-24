@@ -11,7 +11,13 @@ STREAM_FORMAT = 'bgr'
 
 class PiCam:
 
-    def __init__(self, disp=None):
+    def __init__(self, disp=False):
+        """
+        API pour lancer le camera du Raspberry Pi et la detection
+
+        :param disp: pour afficher l'image, donc inutile en reel
+        :return: None
+        """
         self._cam = PiCamera()
         self._raw_capt = None
         self._img = None
@@ -19,6 +25,12 @@ class PiCam:
         self.apple_detector = AppleDetect()
 
     def initialize(self, resolution=(320, 240)):
+        """
+        Initialiser le camera
+
+        :param resolution: la resolution que le camera va capturer
+        :return: None
+        """
         self._cam.resolution = resolution
         self._cam.awb_mode = 'tungsten'
         self._raw_capt = PiRGBArray(self._cam, size=resolution)
@@ -56,6 +68,12 @@ class PiCam:
             self._raw_capt.truncate(0)
     
     def run(self):
+        """
+        Boucle infinie qui prend continuement l'image capturee par le camera et la traiter
+        Les informations de la detection sont enregistrees dans le fichier report.txt
+
+        :return: None
+        """
         # capture frames from the camera
         while True:
             self._cam.capture(self._raw_capt, format='bgr', use_video_port=True)

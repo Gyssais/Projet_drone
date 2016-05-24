@@ -2,7 +2,6 @@ from constance import *
 
 
 class AppleDetect:
-
     def __init__(self, cascade='cascade_pomme3.xml'):
         self._apples = None
         self._cascade = cv2.CascadeClassifier(cascade)
@@ -25,30 +24,24 @@ class AppleDetect:
         mask = np.zeros((img.shape[0], img.shape[1], 1), np.uint8)
         for (x, y, w, h) in self._apples:
             found = False
-            cv2.circle(mask, center=(x+(w/2), y+(h/2)), radius=(w+h)/5, color=WHITE, thickness=-1)
+            cv2.circle(mask, center=(x + (w / 2), y + (h / 2)), radius=(w + h) / 5, color=WHITE, thickness=-1)
             color = cv2.mean(img, mask)
-            self.info_apples_fit.append([(x+(w/2), y+(h/2)), (w+h)/5, color])
+            self.info_apples_fit.append([(x + (w / 2), y + (h / 2)), (w + h) / 5, color])
             for i in range(3):
                 if self._upper_color[i] > color[i] > self._lower_color[i]:
                     found = True
                 else:
                     found = False
-            if found:    
+            if found:
                 self.nb_apples_fit += 1
-            self.info_apples_fit.append([(x+(w/2), y+(h/2)), (w+h)/5, color])
-            cv2.circle(mask, center=(x+(w/2), y+(h/2)), radius=(w+h)/5, color=BLACK, thickness=-1)
+            self.info_apples_fit.append([(x + (w / 2), y + (h / 2)), (w + h) / 5, color])
+            cv2.circle(mask, center=(x + (w / 2), y + (h / 2)), radius=(w + h) / 5, color=BLACK, thickness=-1)
 
     def set_upper_color(self, val):
         self._upper_color = val
 
     def set_lower_color(self, val):
         self._lower_color = val
-
-    def set_upper_color(self, color):
-	self._upper_color = color
-
-    def set_lower_color(self, color):
-	self._lower_color = color
 
     def set_all_color(self):
         self._upper_color = WHITE
@@ -62,16 +55,38 @@ class AppleDetect:
 
 if __name__ == '__main__':
 
-    img = cv2.imread('../img/1 apple.jpg')
+    cam = cv2.VideoCapture(0)
+    _, img = cam.read()
+
     test = np.zeros(img.shape, np.uint8)
 
     apple_detector = AppleDetect()
     apple_detector.set_all_color()
-    apple_detector.detect_and_filter(img)
 
+    while cv2.waitKey(1) != ord('q'):
+        _, img = cam.read()
+        apple_detector.detect_and_filter(img)
+        test = np.zeros(img.shape, np.uint8)
+        for i in iter(apple_detector.info_apples_fit):
+            cv2.circle(img, i[0], i[1], i[2], thickness=3)
+            cv2.circle(test, i[0], i[1], i[2], thickness=-1)
+        cv2.imshow('img', img)
+        cv2.imshow('test', test)
+        apple_detector.reset_info()
+
+    cam.release()
+    cv2.destroyAllWindows()
+
+    img = cv2.imread('../../../img/many_apples.jpg')
+    apple_detector.detect_and_filter(img)
+    test = np.zeros(img.shape, np.uint8)
+    cv2.imshow('init', img)
     for i in iter(apple_detector.info_apples_fit):
+        cv2.circle(img, i[0], i[1], i[2], thickness=-1)
         cv2.circle(test, i[0], i[1], i[2], thickness=-1)
-    
     cv2.imshow('img', img)
     cv2.imshow('test', test)
+    apple_detector.reset_info()
+
     cv2.waitKey(0)
+    cv2.destroyAllWindows()
